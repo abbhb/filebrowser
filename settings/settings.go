@@ -27,6 +27,7 @@ type Settings struct {
 	Commands         map[string][]string `json:"commands"`
 	Shell            []string            `json:"shell"`
 	Rules            []rules.Rule        `json:"rules"`
+	Oauth2           Oauth2              `json:"oauth2"`
 }
 
 // GetRules implements rules.Provider.

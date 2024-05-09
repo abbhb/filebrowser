@@ -346,6 +346,16 @@ func quickSetup(flags *pflag.FlagSet, d pythonData) {
 		Commands: nil,
 		Shell:    nil,
 		Rules:    nil,
+		Oauth2: settings.Oauth2{
+			Disable:      true,
+			Name:         "",
+			Tokenurl:     "",
+			Meurl:        "",
+			Userinfourl:  "",
+			Clientid:     "",
+			Clientsecret: "",
+			Redirecturi:  "",
+		},
 	}
 
 	var err error

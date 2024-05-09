@@ -99,7 +99,9 @@
     "submit": "登录",
     "username": "用户名",
     "usernameTaken": "用户名已经被使用",
-    "wrongCredentials": "用户名或密码错误"
+    "wrongCredentials": "用户名或密码错误",
+    "Oauth2Callback": "回调页",
+    "AboutUS": "关于我们"
   },
   "permanent": "永久",
   "prompts": {
