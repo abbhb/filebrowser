@@ -1,4 +1,6 @@
-interface ISettings {
+import { str } from "video.js";
+
+export interface ISettings {
   signup: boolean;
   createUserDir: boolean;
   userHomeBasePath: string;
@@ -8,9 +10,10 @@ interface ISettings {
   tus: SettingsTus;
   shell: string[];
   commands: SettingsCommand;
+  oauth2:Oauth2
 }
 
-interface SettingsDefaults {
+export interface SettingsDefaults {
   scope: string;
   locale: string;
   viewMode: ViewModeType;
@@ -21,8 +24,21 @@ interface SettingsDefaults {
   hideDotfiles: boolean;
   dateFormat: boolean;
 }
+export interface Oauth2 {
+  disable?:boolean;
+  name?:string;
+  tokenurl?:string;
+  meurl?:string;
+  userinfourl?:string;
+  clientid?:string;
+  clientsecret?:string;
+  redirecturi?:string;
+  scope?:string;
+  state?:string;
+  authorizeurl?:string;
+}
 
-interface SettingsBranding {
+export interface SettingsBranding {
   name: string;
   disableExternal: boolean;
   disableUsedPercentage: boolean;
@@ -31,12 +47,12 @@ interface SettingsBranding {
   color: string;
 }
 
-interface SettingsTus {
+export interface SettingsTus {
   chunkSize: number;
   retryCount: number;
 }
 
-interface SettingsCommand {
+export interface SettingsCommand {
   after_copy?: string[];
   after_delete?: string[];
   after_rename?: string[];
@@ -49,7 +65,7 @@ interface SettingsCommand {
   before_upload?: string[];
 }
 
-interface SettingsUnit {
+export interface SettingsUnit {
   KB: number;
   MB: number;
   GB: number;

@@ -37,6 +37,9 @@
       <p @click="toggleMode" v-if="signup">
         {{ createMode ? t("login.loginInstead") : t("login.createAnAccount") }}
       </p>
+      <p v-if="oauth2Config.useOauth2" @click="oauth2">
+        {{ oauth2Config.Oauth2Name }}
+      </p>
     </form>
   </div>
 </template>
@@ -54,6 +57,7 @@ import {
 import { inject, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import { getOauth2LoginState } from "@/api/settings.js";
 
 // Define refs
 const createMode = ref<boolean>(false);
@@ -61,6 +65,11 @@ const error = ref<string>("");
 const username = ref<string>("");
 const password = ref<string>("");
 const passwordConfirm = ref<string>("");
+const oauth2Config = ref({
+  useOauth2: false,
+  Oauth2Name: "",
+  Oauth2Url: "",
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -114,6 +123,52 @@ const submit = async (event: Event) => {
   }
 };
 
+const updateOauthData = async () => {
+  const data = await getOauth2LoginState()
+  oauth2Config.value.useOauth2 = data["use"];
+  if (oauth2Config.value.useOauth2) {
+    oauth2Config.value.Oauth2Name = data["name"]
+    oauth2Config.value.Oauth2Url = data["url"]
+  }
+}
+updateOauthData()
+const oauth2 = () => {
+  window.location.href = oauth2Config.value.Oauth2Url;
+};
+
+const code = ref();
+async function init() {
+  if (window.location.search.indexOf("code=") !== -1) {
+    // console.log(window.location.search.split("?code=")[1])
+    const codes = window.location.search.split("code=");
+    code.value = codes[codes.length - 1].split("&")[0];
+    let redirect = ""
+    try {
+      if (window.location.search.indexOf("redirect=") !== -1) {
+        const redirects = window.location.search.split("redirect=")
+        redirect = redirects[redirects.length-1].split("&")[0].split("?")[0]
+      }
+    }catch (e) {
+      redirect = "/files/";
+    }
+    if (redirect === "" || redirect === undefined || redirect === null) {
+      redirect = "/files/";
+    }
+    try {
+      await auth.oauth2callback(code.value);
+      await router.push({ path: redirect });
+    } catch (e) {
+      if (e.message == 409) {
+        $showError(t("login.usernameTaken"));
+        router.push({ name: "Login" });
+      } else {
+        $showError(t("login.wrongCredentials"));
+        router.push({ name: "Login" });
+      }
+    }
+  }
+}
+init();
 // Run hooks
 onMounted(() => {
   if (!recaptcha) return;
@@ -124,4 +179,5 @@ onMounted(() => {
     });
   });
 });
+
 </script>

@@ -50,6 +50,8 @@ func NewHandler(
 
 	tokenExpirationTime := server.GetTokenExpirationTime(DefaultTokenExpirationTime)
 	api.Handle("/login", monkey(loginHandler(tokenExpirationTime), ""))
+	api.Handle("/oauth2callback", monkey(oauth2CallBackHandler(tokenExpirationTime), ""))
+	api.Handle("/oauth2state", monkey(oauth2StateHandel, ""))
 	api.Handle("/signup", monkey(signupHandler, ""))
 	api.Handle("/renew", monkey(renewHandler(tokenExpirationTime), ""))
 
@@ -59,6 +61,10 @@ func NewHandler(
 	users.Handle("/{id:[0-9]+}", monkey(userPutHandler, "")).Methods("PUT")
 	users.Handle("/{id:[0-9]+}", monkey(userGetHandler, "")).Methods("GET")
 	users.Handle("/{id:[0-9]+}", monkey(userDeleteHandler, "")).Methods("DELETE")
+
+	syncApi := api.PathPrefix("/sync").Subrouter()
+	syncApi.Handle("/user", monkey(syncUserGetHandler, "")).Methods("GET")
+	syncApi.Handle("/user", monkey(syncUserPostHandler, "")).Methods("POST")
 
 	api.PathPrefix("/resources").Handler(monkey(resourceGetHandler, "/api/resources")).Methods("GET")
 	api.PathPrefix("/resources").Handler(monkey(resourceDeleteHandler(fileCache), "/api/resources")).Methods("DELETE")

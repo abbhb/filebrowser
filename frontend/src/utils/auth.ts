@@ -104,3 +104,24 @@ export function logout() {
     router.push({path: "/login"});
   }
 }
+
+
+export async function oauth2callback(code:any) {
+  const data = {code};
+
+  const res = await fetch(`${baseURL}/api/oauth2callback`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  const body = await res.text();
+
+  if (res.status === 200) {
+    parseToken(body);
+  } else {
+    throw new Error(body);
+  }
+}

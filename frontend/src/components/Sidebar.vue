@@ -93,12 +93,10 @@
     <p class="credits">
       <span>
         <span v-if="disableExternal">File Browser</span>
-        <a
+        <span
           v-else
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://github.com/filebrowser/filebrowser"
-          >File Browser</a
+          @click="gotoAbout"
+          >File Browser</span
         >
         <span> {{ version }}</span>
       </span>
@@ -115,6 +113,7 @@ import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "@/stores/auth";
 import { useFileStore } from "@/stores/file";
 import { useLayoutStore } from "@/stores/layout";
+
 
 import * as auth from "@/utils/auth";
 import {
@@ -186,6 +185,9 @@ export default {
     },
     help() {
       this.showHover("help");
+    },
+    gotoAbout(){
+      this.$router.push({ name: "AboutUS" });
     },
     logout: auth.logout,
   },

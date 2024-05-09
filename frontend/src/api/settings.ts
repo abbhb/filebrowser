@@ -10,3 +10,7 @@ export async function update(settings: ISettings) {
     body: JSON.stringify(settings),
   });
 }
+
+export function getOauth2LoginState() {
+  return fetchJSON(`/api/oauth2state`, {});
+}

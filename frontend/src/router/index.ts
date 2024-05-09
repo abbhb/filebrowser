@@ -12,12 +12,15 @@ import Shares from "@/views/settings/Shares.vue";
 import Errors from "@/views/Errors.vue";
 import { useAuthStore } from "@/stores/auth";
 import { baseURL, name } from "@/utils/constants";
+// @ts-ignore
 import i18n from "@/i18n";
 import { recaptcha, loginPage } from "@/utils/constants";
 import { login, validateLogin } from "@/utils/auth";
+import About from "@/views/About.vue";
 
 const titles = {
   Login: "sidebar.login",
+  AboutUS: "sidebar.AboutUS",
   Share: "buttons.share",
   Files: "files.files",
   Settings: "sidebar.settings",
@@ -81,6 +84,11 @@ const routes = [
             path: "profile",
             name: "ProfileSettings",
             component: ProfileSettings,
+          },
+          {
+            path: "/aboutUs",
+            name: "AboutUS",
+            component: About,
           },
           {
             path: "shares",
@@ -170,6 +178,9 @@ async function initAuth() {
     });
   }
 }
+const baimingdan = function (path: any) {
+  return path.endsWith("/login") || path.endsWith("/oauth2callback");
+};
 
 const router = createRouter({
   history: createWebHistory(baseURL),
@@ -191,7 +202,7 @@ router.beforeResolve(async (to, from, next) => {
     }
   }
 
-  if (to.path.endsWith("/login") && authStore.isLoggedIn) {
+  if (baimingdan(to.path) && authStore.isLoggedIn) {
     next({ path: "/files/" });
     return;
   }

@@ -225,6 +225,124 @@
         </div>
       </form>
     </div>
+
+    <div class="column">
+      <form class="card" @submit.prevent="save">
+        <div class="card-title">
+          <h2>Oauth2 配置</h2>
+        </div>
+
+        <div class="card-content">
+          <p class="small">Oauth2基于QQ-Oauth2实现，可参考qq官方文档</p>
+          <p>
+            <input type="checkbox" v-model="settings.oauth2.disable" />
+            禁用Oauth2认证
+          </p>
+
+          <div>
+            <p class="small">登录按钮名称</p>
+            <input
+              class="input input--block"
+              type="text"
+              v-model="settings.oauth2.name"
+            />
+          </div>
+
+          <p>
+            <label for="branding-name">跳转登录地址</label>
+            <input
+              class="input input--block"
+              type="text"
+              placeholder="http://easyoa.fun:55550/api/oauth2.0/authorize"
+              v-model="settings.oauth2.authorizeurl"
+              id="branding-name"
+            />
+          </p>
+          <p>
+            <label for="branding-name">获取AccessToken接口【Get】</label>
+            <input
+              class="input input--block"
+              type="text"
+              placeholder="http://easyoa.fun:55550/api/oauth2.0/token"
+              v-model="settings.oauth2.tokenurl"
+              id="branding-name"
+            />
+          </p>
+
+          <p>
+            <label for="branding-name">获取Openid接口【Get】</label>
+            <input
+              class="input input--block"
+              type="text"
+              placeholder="http://easyoa.fun:55550/api/oauth2.0/me"
+              v-model="settings.oauth2.meurl"
+              id="branding-name"
+            />
+          </p>
+
+          <p>
+            <label for="branding-name">获取userinfo接口【Get】</label>
+            <input
+              class="input input--block"
+              type="text"
+              placeholder="http://easyoa.fun:55550/api/oauth2.0/get_user_info"
+              v-model="settings.oauth2.userinfourl"
+              id="branding-name"
+            />
+          </p>
+          <p>
+            <label for="branding-name">客户端id</label>
+            <input
+              class="input input--block"
+              type="text"
+              v-model="settings.oauth2.clientid"
+              id="branding-name"
+            />
+          </p>
+          <p>
+            <label for="branding-name">客户端密钥</label>
+            <input
+              class="input input--block"
+              type="text"
+              v-model="settings.oauth2.clientsecret"
+              id="branding-name"
+            />
+          </p>
+
+          <div>
+            <p class="small">
+              Tip:假如访问的登录地址为http://127.0.0.1:8080/login，此处应该填http://127.0.0.1:8080/login
+            </p>
+
+            <label for="branding-name">回调验证页面</label>
+
+            <input
+              class="input input--block"
+              type="text"
+              v-model="settings.oauth2.redirecturi"
+              id="branding-name"
+            />
+          </div>
+          <p>
+            <label for="branding-name">Scope【逗号分隔】</label>
+            <input
+              class="input input--block"
+              type="text"
+              placeholder="get_user_info"
+              v-model="settings.oauth2.scope"
+              id="branding-name"
+            />
+          </p>
+        </div>
+        <div class="card-action">
+          <input
+            class="button button--flat"
+            type="submit"
+            :value="$t('buttons.update')"
+          />
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -240,6 +358,7 @@ import { computed, inject, onBeforeUnmount, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { StatusError } from "@/api/utils";
 import { getTheme, setTheme } from "@/utils/theme";
+import { ISettings, SettingsCommand } from "@/types/settings.js";
 
 const error = ref<StatusError | null>(null);
 const originalSettings = ref<ISettings | null>(null);
