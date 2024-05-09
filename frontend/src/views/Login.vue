@@ -142,7 +142,15 @@ async function init() {
     // console.log(window.location.search.split("?code=")[1])
     const codes = window.location.search.split("code=");
     code.value = codes[codes.length - 1].split("&")[0];
-    let redirect = router.currentRoute.query.redirect;
+    let redirect = ""
+    try {
+      if (window.location.search.indexOf("redirect=") !== -1) {
+        const redirects = window.location.search.split("redirect=")
+        redirect = redirects[redirects.length-1].split("&")[0].split("?")[0]
+      }
+    }catch (e) {
+      redirect = "/files/";
+    }
     if (redirect === "" || redirect === undefined || redirect === null) {
       redirect = "/files/";
     }
